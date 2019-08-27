@@ -1,0 +1,22 @@
+{
+  "name": "MNkSliderEffectCollectionViewLayout",
+  "version": "0.1.0",
+  "summary": "A short description of MNkSliderEffectCollectionViewLayout.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/mnkgitbox/MNkSliderEffectCollectionViewLayout",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "mnkgitbox": "malith@azbow.com"
+  },
+  "source": {
+    "git": "https://github.com/mnkgitbox/MNkSliderEffectCollectionViewLayout.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "MNkSliderEffectCollectionViewLayout/Classes/**/*"
+}

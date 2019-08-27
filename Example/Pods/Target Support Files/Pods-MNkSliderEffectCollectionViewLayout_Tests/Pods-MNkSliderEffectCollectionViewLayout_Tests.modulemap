@@ -1,0 +1,6 @@
+framework module Pods_MNkSliderEffectCollectionViewLayout_Tests {
+  umbrella header "Pods-MNkSliderEffectCollectionViewLayout_Tests-umbrella.h"
+
+  export *
+  module * { export * }
+}

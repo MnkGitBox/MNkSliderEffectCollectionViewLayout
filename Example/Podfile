@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'MNkSliderEffectCollectionViewLayout_Example' do
+  pod 'MNkSliderEffectCollectionViewLayout', :path => '../'
+
+  target 'MNkSliderEffectCollectionViewLayout_Tests' do
+    inherit! :search_paths
+
+    pod 'FBSnapshotTestCase' , '~> 2.1.4'
+  end
+end
