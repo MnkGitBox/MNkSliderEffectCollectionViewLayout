@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'MNkSliderEffectCollectionViewLayout'
-  s.version          = '1.01'
+  s.version          = '1.02'
   s.summary          = 'Custom Animator layout with horizontal slider'
 
 # This description is used to generate tags and improve search results.
@@ -36,6 +36,6 @@ Pod::Spec.new do |s|
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   s.frameworks = 'UIKit'
-  s.swift_version = '4.0'
+  s.swift_version = '4.2'
   # s.dependency 'AFNetworking', '~> 2.3'
 end
