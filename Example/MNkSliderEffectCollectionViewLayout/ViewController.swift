@@ -13,6 +13,10 @@ class ViewController: UIViewController {
     
     private var collectionView:UICollectionView!
     
+    private var button:UIButton!
+    
+    var count = 10
+    
     func createViews(){
         let layout = MNkSliderScrollEffectLayout()
         collectionView = UICollectionView.init(frame: self.view.bounds,
@@ -24,13 +28,24 @@ class ViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(CollectionCell.self, forCellWithReuseIdentifier: "cell_id")
+        
+        button = UIButton.init(frame: CGRect.init(origin: .zero, size: CGSize.init(width: self.view.bounds.size.width, height: 100)))
+        button.setTitle("Click here", for: .normal)
+        button.backgroundColor = .green
+        button.addTarget(self, action: #selector(buttonClicked), for: .touchUpInside)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         createViews()
         view.addSubview(collectionView)
+        view.addSubview(button)
         collectionView.backgroundColor = .white
+    }
+    
+    @objc private func buttonClicked(){
+        count = Int.random(in: 1..<20)
+        collectionView.reload()
     }
 }
 
@@ -47,7 +62,7 @@ extension ViewController:MNkSliderScrollEffectLayoutProtocol{
 
 extension ViewController:UICollectionViewDataSource,UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

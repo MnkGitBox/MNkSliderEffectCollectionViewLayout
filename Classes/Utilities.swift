@@ -8,20 +8,27 @@
 
 import UIKit
 
-extension CGRect{
+public extension CGRect{
     var center:CGPoint{
         return CGPoint.init(x: self.minX + (self.width/2),
                             y: self.minY + (self.height/2))
     }
 }
 
-extension UICollectionView{
+public extension UICollectionView{
     func cellPosition(ofCell attrib:UICollectionViewLayoutAttributes)->CGRect{
         return self.convert(attrib.frame, to: self.superview)
     }
+    
+    func reload(){
+        guard let layout = self.collectionViewLayout as? MNkSliderScrollEffectLayout else{return}
+        layout.cache = []
+        self.reloadData()
+        layout.invalidateLayout()
+    }
 }
 
-protocol ActualFrame{
+public protocol ActualFrame{
     var bounds:CGRect{get}
     var center:CGPoint{get}
 }
@@ -30,7 +37,7 @@ extension UIView:ActualFrame{}
 
 extension UICollectionViewLayoutAttributes:ActualFrame{}
 
-extension ActualFrame{
+public extension ActualFrame{
     var actualFrame:CGRect{
         let size = self.bounds.size
         let oX = center.x - (size.width / 2)

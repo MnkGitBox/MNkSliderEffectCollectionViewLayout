@@ -36,7 +36,7 @@ open class MNkSliderScrollEffectLayout:UICollectionViewLayout{
     public var minAlphaFactor:CGFloat = 1.0
     public var isPaginEnabled:Bool = false{
         didSet{
-            collectionView?.decelerationRate = isPaginEnabled ? UIScrollViewDecelerationRateFast : UIScrollViewDecelerationRateNormal
+            collectionView?.decelerationRate = isPaginEnabled ? .fast : .normal
         }
     }
     public var interItemSpace:CGFloat = 10
@@ -46,8 +46,18 @@ open class MNkSliderScrollEffectLayout:UICollectionViewLayout{
         }
     }
     public var cache = [UICollectionViewLayoutAttributes]()
+    public var displayIndexPath:IndexPath{
+        return _displayIndexPath
+    }
     //
-    
+    private var _displayIndexPath = IndexPath.init(item: 0, section: 0){
+        didSet{
+            guard isPaginEnabled else{return}
+            delegate?.sliderCollectionView(activeCell:_displayIndexPath,
+                                           in: collectionView!,
+                                           with: self)
+        }
+    }
     private var cellSize:CGSize = .init(width: 50, height: 50)
     private var contentWidth:CGFloat = 0
     
@@ -67,7 +77,7 @@ open class MNkSliderScrollEffectLayout:UICollectionViewLayout{
             else{return}
         
         for item in 0..<cv.numberOfItems(inSection: 0){
-           prepareLayotAttribute(for: item, 0, in: cv)
+            prepareLayotAttribute(for: item, 0, in: cv)
         }
         
         configLayoutDefaultOp()
@@ -89,11 +99,7 @@ open class MNkSliderScrollEffectLayout:UICollectionViewLayout{
     
     override open func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint, withScrollingVelocity velocity: CGPoint) -> CGPoint {
         let pagingPoint = self.pagingPoint(for: proposedContentOffset)
-       
-        delegate?.sliderCollectionView(activeCell: pagingPoint.activeIndexPath,
-                                       in: collectionView!,
-                                       with: self)
-        
+        _displayIndexPath = pagingPoint.activeIndexPath
         return pagingPoint.activeCellOffSetX
     }
     
@@ -118,19 +124,30 @@ open class MNkSliderScrollEffectLayout:UICollectionViewLayout{
         atrib.frame = cellFrame
         cache.append(atrib)
         
-        contentWidth = max(contentWidth,cellFrame.maxX)
+        contentWidth = cellFrame.maxX
     }
-   
+    
     
     /*.......................................................................
      Mark:-Configuration for default layourt behaviour
      .......................................................................*/
     private func configLayoutDefaultOp(){
         collectionView?.contentInset = contentInset(forDisplay: displayPosition)
-        guard isPaginEnabled else{return}
-        delegate?.sliderCollectionView(activeCell:IndexPath.init(item: 0, section: 0),
-                                       in: collectionView!,
-                                       with: self)
+        _displayIndexPath = activectiveIndexInReload()
+    }
+    
+    
+    /*.......................................................................
+     Mark:- Return Active indexPath when reloading collection
+     .......................................................................*/
+    private func activectiveIndexInReload()->IndexPath{
+        guard let finalAttrib = cache.last,
+            let cv = collectionView
+            else{return IndexPath.init(item: 0, section: 0)}
+        
+        let offSet = finalAttrib.indexPath.item < _displayIndexPath.item ? finalAttrib.frame.origin : cv.contentOffset
+        
+        return pagingPoint(for: offSet).activeIndexPath
     }
     
     
@@ -141,7 +158,7 @@ open class MNkSliderScrollEffectLayout:UICollectionViewLayout{
     private func animatorAttribute(for visibleAttribs:[UICollectionViewLayoutAttributes])->[UICollectionViewLayoutAttributes]{
         guard let cv = collectionView,
             let animator = delegate?.sliderCollectionViewAnimator(for:cv,
-                                                                    with: self)
+                                                                  with: self)
             else{return visibleAttribs}
         
         animator.cellSize = cellSize
@@ -151,7 +168,7 @@ open class MNkSliderScrollEffectLayout:UICollectionViewLayout{
         animator.minAlphaFactor = minAlphaFactor
         
         return animator.animatorAttibutes(using: visibleAttribs,
-                                         atDisplay: displayPosition)
+                                          atDisplay: displayPosition)
     }
     
     
@@ -221,14 +238,14 @@ extension MNkSliderScrollEffectLayout{
         case .left:
             originX = proposeOffSet.x
         case .right:
-           originX = proposeOffSet.x + (cv.bounds.size.width - cellSize.width)
+            originX = proposeOffSet.x + (cv.bounds.size.width - cellSize.width)
         case .middle:
             originX = proposeOffSet.x + ((cv.bounds.size.width / 2) - (cellSize.width/2))
         }
         
         return CGRect.init(origin: CGPoint.init(x: originX,
-                                                 y: originY),
-                            size: cellSize)
+                                                y: originY),
+                           size: cellSize)
     }
     
     private func pagingCellOffSetX(forMaxClipping attrib:UICollectionViewLayoutAttributes,
@@ -247,6 +264,6 @@ extension MNkSliderScrollEffectLayout{
         case .middle:
             posX = attrib.center.x - (cv.bounds.size.width/2)
         }
-         return CGPoint.init(x: posX, y: posY)
+        return CGPoint.init(x: posX, y: posY)
     }
 }
