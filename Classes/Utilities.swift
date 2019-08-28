@@ -26,6 +26,16 @@ public extension UICollectionView{
         self.reloadData()
         layout.invalidateLayout()
     }
+    
+    var sliderScrollEffectDelegate:MNkSliderScrollEffectLayoutProtocol?{
+        get{
+            return (collectionViewLayout as? MNkSliderScrollEffectLayout)?.delegate
+        }
+        set{
+            (collectionViewLayout as? MNkSliderScrollEffectLayout)?.delegate = newValue
+        }
+        
+    }
 }
 
 public protocol ActualFrame{
