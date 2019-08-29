@@ -11,23 +11,32 @@ import MNkSliderEffectCollectionViewLayout
 
 class ViewController: UIViewController {
     
-    private var collectionView:UICollectionView!
+//    private var collectionView:UICollectionView!
     
     private var button:UIButton!
     
     var count = 10
     
+//    var viewContainer:UIView!
+    
+    var slider:Container!
+    
     func createViews(){
-        let layout = MNkSliderScrollEffectLayout()
-        collectionView = UICollectionView.init(frame: self.view.bounds,
-                                               collectionViewLayout: layout)
-        layout.delegate = self
-        layout.isPaginEnabled = true
-        layout.displayPosition = .middle
-        layout.minScaleFactor = 0.6
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.register(CollectionCell.self, forCellWithReuseIdentifier: "cell_id")
+        
+//        viewContainer = UIView()
+        
+//        let layout = MNkSliderScrollEffectLayout()
+//        collectionView = UICollectionView.init(frame: .zero,
+//                                               collectionViewLayout: layout)
+//        layout.isPaginEnabled = true
+//        layout.displayPosition = .middle
+//        layout.minScaleFactor = 0.6
+//        collectionView.dataSource = self
+//        collectionView.delegate = self
+//        collectionView.sliderScrollEffectDelegate = self
+//        collectionView.register(CollectionCell.self, forCellWithReuseIdentifier: "cell_id")
+        
+        slider = Container()
         
         button = UIButton.init(frame: CGRect.init(origin: .zero, size: CGSize.init(width: self.view.bounds.size.width, height: 100)))
         button.setTitle("Click here", for: .normal)
@@ -38,19 +47,33 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         createViews()
-        view.addSubview(collectionView)
+        
+        view.addSubview(slider)
+                slider.translatesAutoresizingMaskIntoConstraints = false
+                NSLayoutConstraint.activate([slider.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                    slider.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                    slider.topAnchor.constraint(equalTo: view.topAnchor),
+                    slider.bottomAnchor.constraint(equalTo: view.bottomAnchor)])
+        
+//        view.addSubview(collectionView)
+//        collectionView.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+//            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+//            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
+//            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)])
+        
         view.addSubview(button)
-        collectionView.backgroundColor = .white
+//        collectionView.backgroundColor = .white
     }
     
     @objc private func buttonClicked(){
-        count = Int.random(in: 1..<20)
-        collectionView.reload()
+        slider.count = Int.random(in: 1..<20)
+        slider.collectionView.reload()
     }
 }
 
 
-extension ViewController:MNkSliderScrollEffectLayoutProtocol{
+extension Container:MNkSliderScrollEffectLayoutProtocol{
     func collectionview(_ collectionView: UICollectionView, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = (collectionView.bounds.size.width*0.6)
         return CGSize.init(width:width, height: width * 1.5)
@@ -60,7 +83,7 @@ extension ViewController:MNkSliderScrollEffectLayoutProtocol{
     }
 }
 
-extension ViewController:UICollectionViewDataSource,UICollectionViewDelegate{
+extension Container:UICollectionViewDataSource,UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return count
     }
@@ -76,3 +99,44 @@ extension ViewController:UICollectionViewDataSource,UICollectionViewDelegate{
 }
 
 
+
+
+class Container:UIView{
+    
+    var collectionView:UICollectionView!
+    
+    var count = 10
+    
+    func createViews(){
+        let layout = MNkSliderScrollEffectLayout()
+        collectionView = UICollectionView.init(frame: .zero,
+                                               collectionViewLayout: layout)
+        layout.isPaginEnabled = true
+        layout.displayPosition = .middle
+        layout.minScaleFactor = 0.6
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.sliderScrollEffectDelegate = self
+        collectionView.register(CollectionCell.self, forCellWithReuseIdentifier: "cell_id")
+        collectionView.backgroundColor = .white
+    }
+    
+    func insertAndLayoutSubviews(){
+        addSubview(collectionView)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+                                     collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
+                                     collectionView.topAnchor.constraint(equalTo: topAnchor),
+                                     collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)])
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        createViews()
+        insertAndLayoutSubviews()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
