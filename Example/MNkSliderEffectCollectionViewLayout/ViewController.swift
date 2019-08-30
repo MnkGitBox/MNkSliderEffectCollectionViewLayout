@@ -73,7 +73,7 @@ class ViewController: UIViewController {
 }
 
 
-extension Container:MNkSliderScrollEffectLayoutProtocol{
+extension Container:MNkSliderScrollEffectLayoutDelegate{
     func collectionview(_ collectionView: UICollectionView, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = (collectionView.bounds.size.width*0.6)
         return CGSize.init(width:width, height: width * 1.5)

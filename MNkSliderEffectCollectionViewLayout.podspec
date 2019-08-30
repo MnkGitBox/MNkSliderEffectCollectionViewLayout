@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'MNkSliderEffectCollectionViewLayout'
-  s.version          = '1.02'
+  s.version          = '1.021'
   s.summary          = 'Custom Animator layout with horizontal slider'
 
 # This description is used to generate tags and improve search results.

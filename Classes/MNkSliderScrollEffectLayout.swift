@@ -9,13 +9,13 @@
 import UIKit
 
 
-public protocol MNkSliderScrollEffectLayoutProtocol{
+public protocol MNkSliderScrollEffectLayoutDelegate{
     func collectionview(_ collectionView:UICollectionView,sizeForItemAt indexPath:IndexPath)->CGSize
     func sliderCollectionViewAnimator(for collectionView:UICollectionView,with layout:MNkSliderScrollEffectLayout)->SliderAnimator
     func sliderCollectionView(activeCell indexPath:IndexPath,in collectionView:UICollectionView,with layout:MNkSliderScrollEffectLayout)
 }
 
-public extension MNkSliderScrollEffectLayoutProtocol{
+public extension MNkSliderScrollEffectLayoutDelegate{
     func collectionview(_ collectionView:UICollectionView,sizeForItemAt indexPath:IndexPath)->CGSize{
         return CGSize.init(width: 50, height: 50)
     }
@@ -31,7 +31,7 @@ open class MNkSliderScrollEffectLayout:UICollectionViewLayout{
     /*............................................................
      Mark:-You can publicly access this properties to make chnages.
      ...........................................................*/
-    internal var delegate:MNkSliderScrollEffectLayoutProtocol?
+    internal var delegate:MNkSliderScrollEffectLayoutDelegate?
     public var minScaleFactor:CGFloat = 0.8
     public var minAlphaFactor:CGFloat = 1.0
     public var isPaginEnabled:Bool = false{
