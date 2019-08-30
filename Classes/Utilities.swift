@@ -27,7 +27,7 @@ public extension UICollectionView{
         layout.invalidateLayout()
     }
     
-    var sliderScrollEffectDelegate:MNkSliderScrollEffectLayoutDelegate?{
+    var sliderScrollEffectDelegate:MNkSliderScrollEffectLayoutProtocol?{
         get{
             return (collectionViewLayout as? MNkSliderScrollEffectLayout)?.delegate
         }
